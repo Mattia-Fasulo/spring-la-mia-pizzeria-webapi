@@ -31,6 +31,7 @@ public class PizzaRestController {
         return pizzaService.getAll();
     }
 
+    // details pizza
     @GetMapping("/{id}")
     public Pizza getById(
             @PathVariable Integer id
@@ -38,18 +39,37 @@ public class PizzaRestController {
         try{
             return  pizzaService.getById(id);
         } catch (PizzaNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "{\"errors\": \"the name must be unique\"}");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
     }
 
+    // create pizza
     @PostMapping
     public Pizza create(
             @Valid @RequestBody Pizza pizza
     ){
         if(!pizzaService.isValidName(pizza)){
-            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "{\"errors\": \"the name must be unique\"}");
         }
         return pizzaService.createPizza(pizza);
+    }
+
+    // update pizza
+    @PostMapping("/{id}")
+    public Pizza update(
+            @PathVariable Integer id,
+            @Valid @RequestBody Pizza pizza
+    ){
+        if(!pizzaService.isValidName(pizza)){
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "{\"errors\": \"the name must be unique\"}");
+        }
+        try{
+            return pizzaService.updatePizza(pizza, id);
+        } catch (PizzaNotFoundException e){
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 }
