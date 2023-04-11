@@ -1,5 +1,6 @@
 package org.exercise.pizzeria.api;
 
+import jakarta.validation.Valid;
 import org.exercise.pizzeria.exceptions.PizzaNotFoundException;
 import org.exercise.pizzeria.model.Pizza;
 import org.exercise.pizzeria.services.PizzaService;
@@ -37,7 +38,18 @@ public class PizzaRestController {
         try{
             return  pizzaService.getById(id);
         } catch (PizzaNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "{\"errors\": \"the name must be unique\"}");
         }
+
+    }
+
+    @PostMapping
+    public Pizza create(
+            @Valid @RequestBody Pizza pizza
+    ){
+        if(!pizzaService.isValidName(pizza)){
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        return pizzaService.createPizza(pizza);
     }
 }

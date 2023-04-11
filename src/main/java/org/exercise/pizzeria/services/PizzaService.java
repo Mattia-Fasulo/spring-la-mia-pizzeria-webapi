@@ -1,21 +1,28 @@
 package org.exercise.pizzeria.services;
 
 import org.exercise.pizzeria.exceptions.PizzaNotFoundException;
+import org.exercise.pizzeria.model.Ingredient;
 import org.exercise.pizzeria.model.Pizza;
+import org.exercise.pizzeria.repository.IngredientRepository;
 import org.exercise.pizzeria.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PizzaService {
 
     @Autowired
     private PizzaRepository pizzaRepository;
+
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
     public List<Pizza> getAll(){
         return pizzaRepository.findAll();
@@ -61,7 +68,9 @@ public class PizzaService {
         pizzaToPersist.setPrice(formPizza.getPrice());
         pizzaToPersist.setImgPath(formPizza.getImgPath());
         pizzaToPersist.setCreatedAt(LocalDateTime.now());
-        pizzaToPersist.setIngredients(formPizza.getIngredients());
+
+        Set<Ingredient> formIngredients = getPizzaIngredients(formPizza);
+        pizzaToPersist.setIngredients(formIngredients);
         return  pizzaRepository.save(pizzaToPersist);
 
     }
@@ -72,7 +81,9 @@ public class PizzaService {
         pizzaToUpdate.setDescription(formPizza.getDescription());
         pizzaToUpdate.setPrice(formPizza.getPrice());
         pizzaToUpdate.setImgPath(formPizza.getImgPath());
-        pizzaToUpdate.setIngredients(formPizza.getIngredients());
+
+        Set<Ingredient> formIngredients = getPizzaIngredients(formPizza);
+        pizzaToUpdate.setIngredients(formIngredients);
         return pizzaRepository.save(pizzaToUpdate);
     }
 
@@ -82,6 +93,14 @@ public class PizzaService {
         }
         return !pizzaRepository.existsByNameAndIdNot(pizzaToValidate.getName(), pizzaToValidate.getId());
     }
+
+    private Set<Ingredient> getPizzaIngredients(Pizza pizza){
+        Set<Ingredient> ingredientSet = new HashSet<>();
+        for(Ingredient i : pizza.getIngredients()){
+            ingredientSet.add(ingredientRepository.findById(i.getId()).orElseThrow());
+        }
+        return ingredientSet;
+   }
 
 
 }
