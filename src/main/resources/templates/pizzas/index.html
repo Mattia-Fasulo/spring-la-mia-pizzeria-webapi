@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <th:block th:replace="~{ fragments/resources :: resources }"></th:block>
   <title>Pizzas</title>
@@ -12,7 +12,11 @@
     <div th:replace="~{fragments/alert :: alert(${message.type},${message.text})}"></div>
   </th:block>
 
-  <th:block th:replace="~{fragments/btn :: button('New Pizza', '/pizzas/create')}"></th:block>
+  <th:block
+          th:replace="~{fragments/btn :: button('New Pizza', '/pizzas/create')}"
+          sec:authorize="hasAuthority('ADMIN')"
+  >
+  </th:block>
 
   <table th:if="${list.size() > 0}" class="table table-dark table-striped mt-2">
     <thead>
@@ -39,10 +43,20 @@
           <a th:href="@{|/pizzas/*{id}|}" class="btn btn-secondary btn-sm"  title="detail">
             <i class="fa-solid fa-pizza-slice"></i>
           </a>
-          <a th:href="@{|/pizzas/edit/*{id}|}" class="btn btn-secondary btn-sm" title="edit">
+          <a
+                  th:href="@{|/pizzas/edit/*{id}|}"
+                  class="btn btn-secondary btn-sm"
+                  title="edit"
+                  sec:authorize="hasAuthority('ADMIN')"
+          >
             <i class="fa-regular fa-pen-to-square text-light"></i>
           </a>
-          <a th:href="@{|/pizzas/delete/*{id}|}" class="btn btn-secondary btn-sm" title="delete">
+          <a
+                  th:href="@{|/pizzas/delete/*{id}|}"
+                  class="btn btn-secondary btn-sm"
+                  title="delete"
+                  sec:authorize="hasAuthority('ADMIN')"
+          >
             <i class="fa-solid fa-trash-can"></i>
           </a>
         </div>

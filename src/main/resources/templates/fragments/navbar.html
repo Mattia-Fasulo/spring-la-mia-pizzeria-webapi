@@ -1,4 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 
 
@@ -37,6 +37,7 @@
                   class="nav-link text-light"
                   th:classAppend="${current == 'ingredients'} ? active : 'not-active'"
                   aria-current="page"
+                  sec:authorize="hasAuthority('ADMIN')"
           >INGREDIENTS
           </a>
         </li>
@@ -65,6 +66,8 @@
 
       </ul>
 
+
+
       <form
               th:if="${showSearch}"
               method="get"
@@ -80,6 +83,11 @@
                 aria-label="Search">
         <button class="btn btn-light" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
       </form>
+
+      <div class="ms-3">
+        <!-- <span sec:authentication="name"></span> -->
+        <a class="btn btn-dark" th:href="@{/logout}">Logout</a>
+      </div>
 
     </div>
   </div>

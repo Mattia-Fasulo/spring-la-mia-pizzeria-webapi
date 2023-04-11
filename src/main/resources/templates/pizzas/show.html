@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <th:block th:replace="~{ fragments/resources :: resources }"></th:block>
   <title>Detail Pizza</title>
@@ -23,7 +23,12 @@
         </div>
 
       </dl>
-      <th:block th:replace="~{fragments/btn :: button('Edit','/pizzas/edit/' + *{id})}"></th:block>
+      <th:block
+              th:replace="~{fragments/btn :: button('Edit','/pizzas/edit/' + *{id})}"
+              sec:authorize="hasAuthority('ADMIN')"
+      >
+
+      </th:block>
 
     </div>
     <div class="w-50">
@@ -31,6 +36,7 @@
       <a th:href="@{/offers/create(pizzaId=${pizza.id})}"
          class="btn btn-secondary rounded-circle"
          title="add borrowing"
+         sec:authorize="hasAuthority('ADMIN')"
       >
         <i class="fa-solid fa-plus"></i>
       </a>
@@ -40,7 +46,7 @@
             <th scope="col">Title</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
-            <th></th>
+            <th sec:authorize="hasAuthority('ADMIN')"></th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -48,7 +54,14 @@
           <td th:text="${offer.title}"></td>
           <td th:text="${offer.startDate}"></td>
           <td th:text="${offer.endDate}"></td>
-          <td><a th:href="@{|/offers/edit/*{id}|}" class="fa-regular fa-pen-to-square text-light mx-5" title="edit"></a></td>
+          <td sec:authorize="hasAuthority('ADMIN')">
+            <a
+                    th:href="@{|/offers/edit/*{id}|}"
+                    class="fa-regular fa-pen-to-square text-light mx-5"
+                    title="edit"
+            >
+            </a>
+          </td>
         </tr>
 
 
