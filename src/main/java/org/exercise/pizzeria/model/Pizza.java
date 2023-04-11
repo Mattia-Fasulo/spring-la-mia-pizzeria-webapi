@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,6 +32,7 @@ import java.util.Set;
 
     @NotEmpty(message = "must not be empty")
     private String imgPath;
+
 
     @OneToMany(mappedBy = "pizza")
     private List<Offer> offers;

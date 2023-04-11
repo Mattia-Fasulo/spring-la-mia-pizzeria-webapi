@@ -56,7 +56,7 @@ public class PizzaRestController {
     }
 
     // update pizza
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public Pizza update(
             @PathVariable Integer id,
             @Valid @RequestBody Pizza pizza
@@ -72,4 +72,20 @@ public class PizzaRestController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+    // delete pizza
+    @PostMapping("/{id}")
+    public void delete(
+            @PathVariable Integer id
+    ){
+        try{
+            boolean success = pizzaService.deleteById(id);
+            if (!success){
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Unable to delete pizza because it has offers");
+            }
+        } catch (PizzaNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
