@@ -1,0 +1,22 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+
+
+</head>
+<body>
+
+<!-- fragment for btn -->
+<a
+        th:fragment="button(text, path)"
+        th:text="${text}"
+        th:href="@{${path}}"
+        type="button"
+        class="btn btn-secondary"
+>
+</a>
+<!-- end fragment for btn -->
+
+
+
+</body>
+</html>

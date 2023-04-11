@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{ fragments/resources :: resources }"></th:block>
+  <title>Detail Pizza</title>
+</head>
+<body>
+<th:block th:replace="~{fragments/navbar :: navbar('pizzas', '', false)}"></th:block>
+<div class="container" th:object="${pizza}">
+  <h1 class="mt-5" th:text="|Pizza: *{name}|">Books</h1>
+  <hr/>
+  <div class="container d-flex">
+    <div class="w-50">
+      <dl>
+        <h3>Details</h3>
+        <dt>Ingredients</dt>
+        <dd th:text="*{description}"></dd>
+        <dt>Price</dt>
+        <dd th:text="*{price}"></dd>
+        <dt>Images</dt>
+        <div class="container-img-show">
+          <img th:src="*{imgPath}" th:alt="*{name}">
+        </div>
+
+      </dl>
+      <th:block th:replace="~{fragments/btn :: button('Edit','/pizzas/edit/' + *{id})}"></th:block>
+
+    </div>
+    <div class="w-50">
+      <h3 class="d-inline">Offers</h3>
+      <a th:href="@{/offers/create(pizzaId=${pizza.id})}"
+         class="btn btn-secondary rounded-circle"
+         title="add borrowing"
+      >
+        <i class="fa-solid fa-plus"></i>
+      </a>
+      <table class="table table-dark table-striped mt-2">
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        <tr th:each="offer : *{offers}" th:object="${offer}">
+          <td th:text="${offer.title}"></td>
+          <td th:text="${offer.startDate}"></td>
+          <td th:text="${offer.endDate}"></td>
+          <td><a th:href="@{|/offers/edit/*{id}|}" class="fa-regular fa-pen-to-square text-light mx-5" title="edit"></a></td>
+        </tr>
+
+
+        </tbody>
+
+
+      </table>
+    </div>
+
+
+  </div>
+  <div class="text-center mt-5">
+  <th:block th:replace="~{fragments/btn :: button('All Pizzas','/')}"></th:block>
+
+  </div>
+</div>
+
+</body>
+</html>

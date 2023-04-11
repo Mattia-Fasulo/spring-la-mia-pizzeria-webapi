@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+
+</body>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{ fragments/resources :: resources }"></th:block>
+  <title>Detail Pizza</title>
+</head>
+<body>
+<th:block th:replace="~{fragments/navbar :: navbar('search', '', false)}"></th:block>
+
+<h3 class="text-center mt-5">Search your pizza by price and ingredients</h3>
+
+<div class="container d-flex justify-content-center">
+  <div class="container-form mt-4">
+    <form
+            th:action="@{/pizzas/search/result}"
+            method="get"
+            role="search"
+    >
+      <div class="mb-3">
+        <label for="ingredients" class="form-label">Ingredients</label>
+        <input name="i" type="text" class="form-control" id="ingredients">
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input name="p" type="number" step=".5" class="form-control" id="price" >
+      </div>
+
+      <button type="submit" class="btn btn-secondary">Submit</button>
+      <a class="btn btn-danger" th:href="@{/pizzas}">Cancel</a>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

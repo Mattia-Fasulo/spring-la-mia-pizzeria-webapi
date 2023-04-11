@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{ fragments/resources :: resources }"></th:block>
+  <title>Pizzas</title>
+</head>
+<body>
+<th:block th:replace="~{fragments/navbar :: navbar('pizzas', ${keyword}, true)}"></th:block>
+<div class="container mt-3">
+
+  <th:block th:if="${message}">
+    <div th:replace="~{fragments/alert :: alert(${message.type},${message.text})}"></div>
+  </th:block>
+
+  <th:block th:replace="~{fragments/btn :: button('New Pizza', '/pizzas/create')}"></th:block>
+
+  <table th:if="${list.size() > 0}" class="table table-dark table-striped mt-2">
+    <thead>
+    <th scope="col">Name</th>
+    <th scope="col">Description</th>
+    <th scope="col">Price</th>
+    <th scope="col">Image</th>
+    <th scope="col"></th>
+
+    </thead>
+
+    <tbody class="table-group-divider">
+    <tr th:each="pizza : ${list}" th:object="${pizza}">
+      <td th:text="*{name}"></td>
+      <td th:text="*{description}"></td>
+      <td th:text="*{price}"></td>
+      <td>
+        <div class="container-img">
+          <img th:src="*{imgPath}" th:alt="*{name}">
+        </div>
+      </td>
+      <td style="width: 130px">
+        <div class="w-100 h-100 d-flex justify-content-between mt-2">
+          <a th:href="@{|/pizzas/*{id}|}" class="btn btn-secondary btn-sm"  title="detail">
+            <i class="fa-solid fa-pizza-slice"></i>
+          </a>
+          <a th:href="@{|/pizzas/edit/*{id}|}" class="btn btn-secondary btn-sm" title="edit">
+            <i class="fa-regular fa-pen-to-square text-light"></i>
+          </a>
+          <a th:href="@{|/pizzas/delete/*{id}|}" class="btn btn-secondary btn-sm" title="delete">
+            <i class="fa-solid fa-trash-can"></i>
+          </a>
+        </div>
+
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
+  <!-- alert only if list is empty -->
+  <th:block th:unless="${list.size() > 0}">
+    <div th:replace="~{/fragments/alert :: alert('INFO', 'The list is empty')}"></div>
+  </th:block>
+</div>
+
+</body>
+</html>
