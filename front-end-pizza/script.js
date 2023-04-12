@@ -23,10 +23,31 @@ const postPizza = async (jsonData) => {
     };
     const response = await fetch(PIZZA_URL, fetchOptions);
     return response;
-  };
+};
+
+const deletePIzzaById = async (pizzaId)=>{
+    const response = await fetch(PIZZA_URL + '/' + pizzaId, {method: 'POST'});
+    loadData();
+}
 
 
 //-----------DOM MANIPULATION----------//
+
+const createDeleteBtn = (pizza) => {
+    let btn = '';
+    const offers = pizza.offers;
+    if (offers !== null && offers.length > 0) {
+      // disabled button
+      btn = `<button disabled class="btn btn-danger" >
+              Delete
+          </button>`;
+    } else {
+      btn = `<button data-id="${pizza.id}" class="btn btn-danger" >
+              Delete
+          </button>`;
+    }
+    return btn;
+  };
 
 const toggleFormVisibility = () => {
     document.getElementById('form').classList.toggle('d-none');
@@ -55,7 +76,7 @@ const createPizzaItem = (item)=>{
 
                         <p class="card-text">${item.price} €</p>
 
-                        <a href="#" class="btn btn-secondary">Go somewhere</a>
+                        <div>${createDeleteBtn(item)}</div>
                     </div>
                     <div class="card-footer">
                     ${createIngredientlist(item.ingredients)}
@@ -90,6 +111,15 @@ const loadData = async ()=>{
 
         console.log(data);
         contentElement.innerHTML = createPizzaList(data);
+
+        const deleteBtns = document.querySelectorAll('button[data-id]');
+        console.log(deleteBtns);
+
+        for (let btn of deleteBtns) {
+            btn.addEventListener('click', ()=>{
+                deletePIzzaById(btn.dataset.id);
+            })
+        }
 
     });   
 
